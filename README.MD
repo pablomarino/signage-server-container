@@ -1,11 +1,13 @@
 # Signage Server image
 
+Docker image for a signage device server
+
 ## Features
 
-Web server: Apache 2 
-SSl Certificate: Certbot
-FTP server: Vsftpd
-SSH server: OpenSSH
+- Web server: Apache 2 
+- SSl Certificate: Certbot
+- FTP server: Vsftpd
+- SSH server: OpenSSH
 
 ## Usage
 
