@@ -1,12 +1,4 @@
 ##
-## Parametros
-## 
-
-ARG USERNAME
-ARG PASSWORD
-
-
-##
 ## Sistema operativo
 ##
 
@@ -14,14 +6,11 @@ FROM debian:latest
 RUN apt-get update && apt-get upgrade -y
 
 ##
-## Usuario
+## Parametros
 ## 
 
-RUN useradd -m -s /bin/bash $USERNAME && echo "$USERNAME:$PASSWORD" | chpasswd
-RUN usermod -aG sudo $USERNAME
-USER $USERNAME
-RUN mkdir -p /home/$USERNAME
-WORKDIR /home/$USERNAME
+ARG USERNAME
+ARG PASSWORD
 
 
 ##
@@ -37,6 +26,9 @@ COPY cfg/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 # RUN a2ensite default-ssl
 RUN a2dissite 000-default
+
+
+
 
 #
 # Certbot
@@ -82,3 +74,13 @@ EXPOSE 80 443 21 22
 COPY script/start.sh /start.sh
 RUN chmod +x /start.sh
 CMD ["/start.sh"]
+
+##
+## Usuario
+## 
+
+RUN useradd -m -s /bin/bash $USERNAME && echo "$USERNAME:$PASSWORD" | chpasswd
+RUN usermod -aG sudo $USERNAME
+USER $USERNAME
+RUN mkdir -p /home/$USERNAME
+WORKDIR /home/$USERNAME
