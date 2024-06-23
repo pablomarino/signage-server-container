@@ -37,3 +37,7 @@ docker ps
 docker exec -it proccess_id /bin/bash
 
 ``` 
+
+## References
+
+- [Generate Certbot Certificate](https://stackoverflow.com/questions/45761841/create-a-docker-apache-image-with-letsencrypt)
