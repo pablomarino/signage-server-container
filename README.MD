@@ -41,6 +41,9 @@ docker ps
 # Run a shell in the container
 docker exec -it proccess_id /bin/bash
 
+# View running services
+service --status-all
+
 ```
 
 ## References

@@ -54,15 +54,20 @@ COPY cfg/vsftp/vsftpd.conf /etc/vsftpd.conf
 ## OpenSSH
 ## 
 
-# RUN apt-get install -y openssh-server
-# RUN mkdir /var/run/sshd
+RUN apt-get install -y openssh-server
+RUN mkdir /var/run/sshd
 # Configuracion
 # desactivar el inicio de sesión como root y permitir la autenticación con contraseña
-# RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
-# RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
-# #RUN useradd -rm -d /home/$USERNAME -s /bin/bash -g root -G sudo -p "$(openssl passwd -1 $PASSWORD)" $USERNAME
-# RUN mkdir -p /home/$USERNAME/.ssh
-# RUN chmod 700 /home/$USERNAME/.ssh
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
+RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
+#RUN useradd -rm -d /home/$USERNAME -s /bin/bash -g root -G sudo -p "$(openssl passwd -1 $PASSWORD)" $USERNAME
+RUN mkdir -p /home/$USERNAME/.ssh
+RUN chmod 700 /home/$USERNAME/.ssh
+
+
+##
+## Cleanup
+##
 
 RUN apt clean 
 

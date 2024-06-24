@@ -7,7 +7,7 @@ service apache2 start
 service vsftpd start
 
 # Servicio SSH
-##service ssh start
+service ssh start
 
 # Certbot para obtener certificados SSL
 ##certbot --apache -d yourdomain --non-interactive --agree-tos -m cecafi@udc.es
