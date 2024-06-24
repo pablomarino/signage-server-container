@@ -1,4 +1,11 @@
 ##
+## Sistema operativo
+##
+
+FROM debian:latest
+RUN apt-get update && apt-get upgrade -y
+
+##
 ## Parametros
 ## 
 
@@ -7,25 +14,25 @@ ARG PASSWORD
 
 
 ##
-## Sistema operativo
-##
-
-FROM debian:latest
-RUN apt-get update && apt-get upgrade -y
-
-##
 ## APACHE2
 ## 
 
-RUN apt-get install -y apache2
+RUN apt install -y apache2
+RUN apt install -y apache2-utils 
+RUN mkdir -p /var/run/apache2 && chmod 755 /var/run/apache2
+
 # Configuracion
 # COPY cfg/apache/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 COPY cfg/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY cfg/apache/index.html /var/www/html
 # Modulos
 # RUN a2enmod ssl
 RUN a2enmod rewrite
 # RUN a2ensite default-ssl
 RUN a2dissite 000-default
+
+
+
 
 #
 # Certbot
@@ -53,18 +60,16 @@ RUN mkdir /var/run/sshd
 # desactivar el inicio de sesión como root y permitir la autenticación con contraseña
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
 RUN echo 'PasswordAuthentication yes' >> /etc/ssh/sshd_config
-# RUN useradd -rm -d /home/$USERNAME -s /bin/bash -g root -G sudo -p "$(openssl passwd -1 $PASSWORD)" $USERNAME
+#RUN useradd -rm -d /home/$USERNAME -s /bin/bash -g root -G sudo -p "$(openssl passwd -1 $PASSWORD)" $USERNAME
 RUN mkdir -p /home/$USERNAME/.ssh
 RUN chmod 700 /home/$USERNAME/.ssh
 
-##
-## Usuario
-## 
 
-RUN useradd -m -s /bin/bash $USERNAME && echo "$USERNAME:$PASSWORD" | chpasswd
-RUN usermod -aG sudo $USERNAME
-USER $USERNAME
-WORKDIR /home/$USERNAME
+##
+## Cleanup
+##
+
+RUN apt clean 
 
 ##
 ## Puertos expuestos HTTP, HTTPS, FTP y SSH
@@ -79,3 +84,13 @@ EXPOSE 80 443 21 22
 COPY script/start.sh /start.sh
 RUN chmod +x /start.sh
 CMD ["/start.sh"]
+
+##
+## Usuario
+## 
+
+RUN useradd -m -s /bin/bash $USERNAME && echo "$USERNAME:$PASSWORD" | chpasswd
+RUN usermod -aG sudo $USERNAME
+#USER $USERNAME
+RUN mkdir -p /home/$USERNAME
+#WORKDIR /home/$USERNAME
