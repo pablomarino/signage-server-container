@@ -17,10 +17,14 @@ ARG PASSWORD
 ## APACHE2
 ## 
 
-RUN apt-get install -y apache2
+RUN apt install -y apache2
+RUN apt install -y apache2-utils 
+RUN mkdir -p /var/run/apache2 && chmod 755 /var/run/apache2
+
 # Configuracion
 # COPY cfg/apache/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 COPY cfg/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY cfg/apache/index.html /var/www/html
 # Modulos
 # RUN a2enmod ssl
 RUN a2enmod rewrite
@@ -41,9 +45,9 @@ RUN a2dissite 000-default
 ## FTP
 ## 
 
-# RUN apt-get install -y vsftpd
+RUN apt-get install -y vsftpd
 # Configuracion servidor ftp 
-# COPY cfg/vsftp/vsftpd.conf /etc/vsftpd.conf
+COPY cfg/vsftp/vsftpd.conf /etc/vsftpd.conf
 # RUN echo "cecafi">etc/vsftp.user_list
 
 ##
@@ -60,6 +64,7 @@ RUN a2dissite 000-default
 # RUN mkdir -p /home/$USERNAME/.ssh
 # RUN chmod 700 /home/$USERNAME/.ssh
 
+RUN apt clean 
 
 ##
 ## Puertos expuestos HTTP, HTTPS, FTP y SSH
@@ -81,6 +86,6 @@ CMD ["/start.sh"]
 
 RUN useradd -m -s /bin/bash $USERNAME && echo "$USERNAME:$PASSWORD" | chpasswd
 RUN usermod -aG sudo $USERNAME
-USER $USERNAME
+#USER $USERNAME
 RUN mkdir -p /home/$USERNAME
-WORKDIR /home/$USERNAME
+#WORKDIR /home/$USERNAME

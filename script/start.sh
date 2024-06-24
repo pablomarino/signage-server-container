@@ -7,10 +7,10 @@ service apache2 start
 service vsftpd start
 
 # Servicio SSH
-service ssh start
+##service ssh start
 
 # Certbot para obtener certificados SSL
-certbot --apache -d yourdomain --non-interactive --agree-tos -m cecafi@udc.es
+##certbot --apache -d yourdomain --non-interactive --agree-tos -m cecafi@udc.es
 
 # Dejo un proceso abierto para que el contenedor siga en ejecución
 tail -f /dev/null
